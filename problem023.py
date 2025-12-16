@@ -13,23 +13,7 @@ As 12 is the smallest abundant number, 1 + 2 + 3 + 4 + 6 = 16, the smallest numb
 Find the sum of all the positive integers which cannot be written as the sum of two abundant numbers.
 """
 from math import sqrt
-
-def main():
-    MAX_NUMBER = 28123
-
-    abundants = list()
-    not_sum_of_abundants = list()
-
-    for n in range(1, MAX_NUMBER):
-        if is_abundant(n):
-            abundants.append(n)
-
-        if not any([((n - a) in abundants) for a in abundants]):
-            not_sum_of_abundants.append(n)
-
-    print(abundants)
-    print(not_sum_of_abundants)
-    print(sum(not_sum_of_abundants))
+from pprint import pprint
 
 def divisors(n: int):
     """
@@ -50,8 +34,41 @@ def divisors(n: int):
     return d
 
 def is_abundant(n: int):
-    print(n, divisors(n))
+    # print(n, divisors(n))
     return (n < sum(divisors(n)))
+
+MAX_NUMBER = 28123
+ABUNDANTS = [n for n in range(1, MAX_NUMBER) if is_abundant(n)]
+
+def main():
+
+    abundants = list()
+    not_sum_of_abundants = list()
+    sum_of_abundants = list()
+
+    for n in range(1, MAX_NUMBER):
+        # if not any([((n - a) in abundants) for a in abundants if a < n]):
+        #     print("\t", n)
+        #     not_sum_of_abundants.append(n)
+        # It is known that all even numbers above 46 can be expressed
+        # as sum of two abundant numbers.
+        if n % 2 == 0 and n > 46:
+            continue
+        if not is_sum_of_abundants(n):
+            not_sum_of_abundants.append(n)
+
+    # pprint(abundants)
+    # pprint(not_sum_of_abundants)
+    print(sum(not_sum_of_abundants))
+
+def is_sum_of_abundants(n: int):
+    for i in range(1, n + 1):
+        if (ABUNDANTS.count(i)
+            and ABUNDANTS.count(n - i)):
+            print(n, i, n - i)
+            return True
+
+    return False
 
 
 if __name__ == "__main__":
